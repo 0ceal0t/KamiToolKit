@@ -173,6 +173,6 @@ public abstract unsafe partial class NodeBase {
 
     public uint DrawFlags {
         get => InternalResNode->DrawFlags;
-        private set => InternalResNode->DrawFlags = value;
+        set => InternalResNode->DrawFlags = value;
     }
 }

@@ -5,6 +5,7 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using KamiToolKit.Classes;
 using KamiToolKit.Nodes;
+using System.Collections.Generic;
 
 namespace KamiToolKit;
 
@@ -52,6 +53,12 @@ public unsafe class NativeController : IDisposable {
 	public void AttachToNode(NodeBase customNode, NodeBase other, NodePosition position) {
 		Framework.RunOnFrameworkThread(() => {
 			customNode.AttachNode(other, position);
+		});
+	}
+
+	public void AttachToNode(List<NodeBase> customNodes, NodeBase other, NodePosition position) {
+		Framework.RunOnFrameworkThread(() => {
+			foreach( var customNode in customNodes) customNode.AttachNode(other, position);
 		});
 	}
 
