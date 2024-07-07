@@ -89,7 +89,7 @@ public abstract unsafe partial class NodeBase {
         set => InternalResNode->OriginY = value;
     }
 
-    private Vector2 Origin {
+    public Vector2 Origin {
         get => new(OriginX, OriginY);
         set {
             OriginX = value.X;
