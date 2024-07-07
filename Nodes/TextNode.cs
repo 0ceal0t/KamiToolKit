@@ -38,6 +38,11 @@ public unsafe class TextNode() : NodeBase<AtkTextNode>(NodeType.Text) {
         set => InternalNode->AlignmentType = value;
     }
 
+    public byte AlignmentFontType {
+        get => InternalNode->AlignmentFontType;
+        set => InternalNode->AlignmentFontType = value;
+    }
+
     public FontType FontType {
         get => InternalNode->FontType;
         set => InternalNode->FontType = value;
