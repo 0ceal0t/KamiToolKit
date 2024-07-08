@@ -20,8 +20,10 @@ public abstract unsafe partial class NodeBase {
 	
 	private IAddonEventManager? EventManager { get; set; }
 
-	public void EnableEvents(IAddonEventManager eventManager, AtkUnitBase* addon) {
-		AddFlags(NodeFlags.EmitsEvents | NodeFlags.HasCollision | NodeFlags.RespondToMouse);
+	public virtual void EnableEvents(IAddonEventManager eventManager, AtkUnitBase* addon) {
+		if (MouseOver is not null || MouseOut is not null || MouseClick is not null || Tooltip is not null) {
+			AddFlags(NodeFlags.EmitsEvents | NodeFlags.HasCollision | NodeFlags.RespondToMouse);
+		}
 
 		if ((MouseOver is not null || Tooltip is not null) && MouseOverHandle is null) {
 			MouseOverHandle = eventManager.AddEvent((nint) addon, (nint) InternalResNode, AddonEventType.MouseOver, HandleEvents);
@@ -40,7 +42,7 @@ public abstract unsafe partial class NodeBase {
 		EventManager = eventManager;
 	}
 	
-	public void DisableEvents(IAddonEventManager eventManager) {
+	public virtual void DisableEvents(IAddonEventManager eventManager) {
 		RemoveFlags(NodeFlags.EmitsEvents | NodeFlags.HasCollision | NodeFlags.RespondToMouse);
 
 		if (MouseOverHandle is not null) {
@@ -61,7 +63,7 @@ public abstract unsafe partial class NodeBase {
 		EventManager = eventManager;
 	}
 	
-	public void UpdateEvents(IAddonEventManager eventManager, AtkUnitBase* addon) {
+	public virtual void UpdateEvents(IAddonEventManager eventManager, AtkUnitBase* addon) {
 		DisableEvents(eventManager);
 		EnableEvents(eventManager, addon);
 	}
