@@ -94,8 +94,8 @@ public unsafe class ImageNode : NodeBase<AtkImageNode> {
         set => InternalNode->Flags = (byte) value;
     }
 
-    public void LoadTexture(string path)
-        => InternalNode->LoadTexture(path);
+    public void LoadTexture(string path, uint version=1)
+        => InternalNode->LoadTexture(path, version);
 
     public void UnloadTexture()
         => InternalNode->UnloadTexture();

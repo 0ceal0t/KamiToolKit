@@ -123,8 +123,8 @@ public unsafe class NineGridNode : NodeBase<AtkNineGridNode> {
         set => InternalNode->PartsTypeRenderType = (byte) value;
     }
 
-    public void LoadTexture(string path)
-        => PartsList->Parts->UldAsset->AtkTexture.LoadTexture(path);
+    public void LoadTexture(string path, uint version=1)
+        => PartsList->Parts->UldAsset->AtkTexture.LoadTexture(path, (int)version);
 }
 
 public enum PartsRenderType {
