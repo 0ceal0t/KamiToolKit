@@ -80,12 +80,15 @@ public unsafe class TextNode() : NodeBase<AtkTextNode>(NodeType.Text) {
 
     public void SetNumber(int number, bool showCommas = false, bool showPlusSign = false, int digits = 0, bool zeroPad = false)
         => InternalNode->SetNumber(number, showCommas, showPlusSign, (byte) digits, zeroPad);
-    
+
     /// <summary>
     /// If you want the node to resize automatically, use TextFlags.AutoAdjustNodeSize <b><em>before</em></b> setting the String property.
     /// </summary>
     public SeString Text {
         get => MemoryHelper.ReadSeStringNullTerminated((nint) InternalNode->GetText());
-        set => InternalNode->SetText(value.Encode());
+        set {
+            InternalNode->NodeText.SetString(value.EncodeWithNullTerminator());
+            InternalNode->SetText(InternalNode->NodeText.StringPtr);
+        }
     }
 }
