@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Numerics;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Interface;
@@ -28,6 +28,11 @@ public unsafe class TextNode : NodeBase<AtkTextNode> {
         }
         
         base.Dispose(disposing);
+    }
+
+    public byte AlignmentFontType {
+        get => InternalNode->AlignmentFontType;
+        set => InternalNode->AlignmentFontType = value;
     }
 
     public Vector4 TextColor {

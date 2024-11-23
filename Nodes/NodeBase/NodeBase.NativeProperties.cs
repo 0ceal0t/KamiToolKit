@@ -78,17 +78,17 @@ public abstract unsafe partial class NodeBase {
         set => InternalResNode->Rotation = value;
     }
 
-    private float OriginX {
+    public float OriginX {
         get => InternalResNode->OriginX;
         set => InternalResNode->OriginX = value;
     }
 
-    private float OriginY {
+    public float OriginY {
         get => InternalResNode->OriginY;
         set => InternalResNode->OriginY = value;
     }
 
-    private Vector2 Origin {
+    public Vector2 Origin {
         get => new(OriginX, OriginY);
         set {
             OriginX = value.X;
@@ -172,7 +172,7 @@ public abstract unsafe partial class NodeBase {
 
     public uint DrawFlags {
         get => InternalResNode->DrawFlags;
-        private set => InternalResNode->DrawFlags = value;
+        set => InternalResNode->DrawFlags = value;
     }
 
     public virtual void SetStyle(NodeBaseStyle style) {

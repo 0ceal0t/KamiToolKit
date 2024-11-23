@@ -11,7 +11,7 @@ public abstract unsafe partial class NodeBase : IDisposable {
 
     private bool isDisposed;
 
-    internal abstract AtkResNode* InternalResNode { get; }
+    public abstract AtkResNode* InternalResNode { get; }
 
     /// <summary>
     /// Warning, this is only to ensure there are no memory leaks.
@@ -42,7 +42,7 @@ public abstract unsafe partial class NodeBase : IDisposable {
 public abstract unsafe class NodeBase<T> : NodeBase where T : unmanaged, ICreatable {
     public T* InternalNode { get; }
 
-    internal override sealed AtkResNode* InternalResNode => (AtkResNode*) InternalNode;
+    public override sealed AtkResNode* InternalResNode => (AtkResNode*) InternalNode;
 
     protected NodeBase(NodeType nodeType) {
         InternalNode = NativeMemoryHelper.Create<T>();

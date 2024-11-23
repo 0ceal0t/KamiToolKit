@@ -46,4 +46,8 @@ public class SimpleNineGridNode : NineGridNode {
     
     public void LoadTexture(string path)
         => PartsList[0].LoadTexture(path);
+
+    public unsafe void LoadTexture( string path, bool hd ) {
+        PartsList[0].InternalAsset->AtkTexture.LoadTexture( path, hd ? 2 : 1 );
+    }
 }

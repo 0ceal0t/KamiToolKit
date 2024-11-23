@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using KamiToolKit.Classes;
 using KamiToolKit.Nodes;
+using System.Collections.Generic;
 
 namespace KamiToolKit;
 
@@ -30,14 +31,14 @@ public unsafe class NativeController : IDisposable {
 	public void Dispose()
 		=> NodeBase.DisposeAllNodes();
 
-	public void AttachToAddon(NodeBase customNode, AtkUnitBase* addon, AtkResNode* target, NodePosition position)
-		=> Framework.RunOnFrameworkThread(() => AttachToAddonTask(customNode, addon, target, position));
+	public void AttachToAddon(NodeBase customNode, AtkUnitBase* addon, AtkResNode* target, NodePosition position, bool enableEvents=true, bool updateCollision=true)
+		=> Framework.RunOnFrameworkThread(() => AttachToAddonTask(customNode, addon, target, position, enableEvents, updateCollision));
 
-	private void AttachToAddonTask(NodeBase customNode, AtkUnitBase* addon, AtkResNode* target, NodePosition position) {
+	private void AttachToAddonTask(NodeBase customNode, AtkUnitBase* addon, AtkResNode* target, NodePosition position, bool enableEvents=true, bool updateCollision=true) {
 		NodeLinker.AttachNode(customNode.InternalResNode, target, position);
-		customNode.EnableEvents(AddonEventManager, addon);
+		if (enableEvents) customNode.EnableEvents(AddonEventManager, addon);
 		addon->UldManager.UpdateDrawNodeList();
-		addon->UpdateCollisionNodeList(false);
+		if (updateCollision) addon->UpdateCollisionNodeList(false);
 	}
 
 	/// <summary>
@@ -55,18 +56,24 @@ public unsafe class NativeController : IDisposable {
 	public void AttachToNode(NodeBase customNode, NodeBase other, NodePosition position)
 		=> Framework.RunOnFrameworkThread(() => AttachToNodeTask(customNode, other, position));
 
+	public void AttachToNode(List<NodeBase> customNodes, NodeBase other, NodePosition position) {
+		Framework.RunOnFrameworkThread(() => {
+			foreach( var customNode in customNodes) customNode.AttachNode(other, position);
+		});
+	}
+
 	private void AttachToNodeTask(NodeBase customNode, NodeBase other, NodePosition position)
 		=> customNode.AttachNode(other, position);
 
-	public void DetachFromAddon(NodeBase customNode, AtkUnitBase* addon)
-		=> Framework.RunOnFrameworkThread(() => DetachFromAddonTask(customNode, addon));
+	public void DetachFromAddon(NodeBase customNode, AtkUnitBase* addon, bool enableEvents = true, bool updateCollision = true)
+		=> Framework.RunOnFrameworkThread(() => DetachFromAddonTask(customNode, addon, enableEvents, updateCollision));
 
-	private void DetachFromAddonTask(NodeBase customNode, AtkUnitBase* addon) {
-		customNode.DisableEvents(AddonEventManager);
+	private void DetachFromAddonTask(NodeBase customNode, AtkUnitBase* addon, bool enableEvents = true, bool updateCollision = true) {
+		if (enableEvents) customNode.DisableEvents(AddonEventManager);
 		customNode.DetachNode();
 			
 		addon->UldManager.UpdateDrawNodeList();
-		addon->UpdateCollisionNodeList(false);
+		if (updateCollision) addon->UpdateCollisionNodeList(false);
 	}
 
 	/// <summary>
