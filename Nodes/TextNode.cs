@@ -1,13 +1,13 @@
-﻿using System.Numerics;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Memory;
 using Dalamud.Utility.Numerics;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using KamiToolKit.Extensions;
+using System.Numerics;
 
 namespace KamiToolKit.Nodes;
 
-public unsafe class TextNode() : NodeBase<AtkTextNode>(NodeType.Text) {
+public unsafe class TextNode() : NodeBase<AtkTextNode>( NodeType.Text ) {
     public Vector4 TextColor {
         get => InternalNode->TextColor.ToVector4();
         set => InternalNode->TextColor = value.ToByteColor();
@@ -49,28 +49,28 @@ public unsafe class TextNode() : NodeBase<AtkTextNode>(NodeType.Text) {
     }
 
     public TextFlags TextFlags {
-        get => (TextFlags) InternalNode->TextFlags;
-        set => InternalNode->TextFlags = (byte) value;
+        get => ( TextFlags )InternalNode->TextFlags;
+        set => InternalNode->TextFlags = ( byte )value;
     }
 
     public TextFlags2 TextFlags2 {
-        get => (TextFlags2) InternalNode->TextFlags2;
-        set => InternalNode->TextFlags2 = (byte) value;
+        get => ( TextFlags2 )InternalNode->TextFlags2;
+        set => InternalNode->TextFlags2 = ( byte )value;
     }
 
     public uint FontSize {
         get => InternalNode->FontSize;
-        set => InternalNode->FontSize = (byte) value;
+        set => InternalNode->FontSize = ( byte )value;
     }
 
     public uint LineSpacing {
         get => InternalNode->LineSpacing;
-        set => InternalNode->LineSpacing = (byte) value;
+        set => InternalNode->LineSpacing = ( byte )value;
     }
-    
+
     public uint CharSpacing {
         get => InternalNode->CharSpacing;
-        set => InternalNode->CharSpacing = (byte) value;
+        set => InternalNode->CharSpacing = ( byte )value;
     }
 
     public uint TextId {
@@ -78,14 +78,14 @@ public unsafe class TextNode() : NodeBase<AtkTextNode>(NodeType.Text) {
         set => InternalNode->TextId = value;
     }
 
-    public void SetNumber(int number, bool showCommas = false, bool showPlusSign = false, int digits = 0, bool zeroPad = false)
-        => InternalNode->SetNumber(number, showCommas, showPlusSign, (byte) digits, zeroPad);
+    public void SetNumber( int number, bool showCommas = false, bool showPlusSign = false, int digits = 0, bool zeroPad = false )
+        => InternalNode->SetNumber( number, showCommas, showPlusSign, ( byte )digits, zeroPad );
 
     /// <summary>
     /// If you want the node to resize automatically, use TextFlags.AutoAdjustNodeSize <b><em>before</em></b> setting the String property.
     /// </summary>
     public SeString Text {
-        get => MemoryHelper.ReadSeStringNullTerminated((nint) InternalNode->GetText());
-        set => InternalNode->SetText(value.EncodeWithNullTerminator());
+        get => MemoryHelper.ReadSeStringNullTerminated( ( nint )InternalNode->GetText().Value );
+        set => InternalNode->SetText( value.EncodeWithNullTerminator() );
     }
 }

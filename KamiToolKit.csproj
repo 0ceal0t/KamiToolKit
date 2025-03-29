@@ -2,5 +2,6 @@
     <PropertyGroup>
         <TargetFramework>net9.0-windows</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <OutputPath>bin\$(Configuration)\</OutputPath>
     </PropertyGroup>
 </Project>
