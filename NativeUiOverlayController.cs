@@ -1,65 +1,65 @@
-﻿
-using System;
+
 using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using System;
 
 namespace KamiToolKit;
 
 /// <summary>
 /// Simplified controller for using AddonNamePlate for basic overlays.
 /// </summary>
-public abstract unsafe class NativeUiOverlayController(IAddonLifecycle addonLifecycle, IFramework framework, IGameGui gameGui) : IDisposable {
-	private AddonNamePlate* AddonNamePlate => (AddonNamePlate*) gameGui.GetAddonByName("NamePlate");
+public abstract unsafe class NativeUiOverlayController( IAddonLifecycle addonLifecycle, IFramework framework, IGameGui gameGui ) : IDisposable {
+    private AddonNamePlate* AddonNamePlate => ( AddonNamePlate* )gameGui.GetAddonByName( "NamePlate" ).Address;
 
-	public void Load() {
-		LoadConfig();
-		
-		addonLifecycle.RegisterListener(AddonEvent.PostSetup, "NamePlate", OnNamePlateSetup);
-		addonLifecycle.RegisterListener(AddonEvent.PreFinalize, "NamePlate", OnNamePlateFinalize);
-		
-		if (AddonNamePlate is not null) {
-			AttachToNative(AddonNamePlate);
-		}
-	}
-	
-	public void Unload() {
-		addonLifecycle.UnregisterListener(OnNamePlateSetup);
-		addonLifecycle.UnregisterListener(OnNamePlateFinalize);
+    public void Load() {
+        LoadConfig();
 
-		if (AddonNamePlate is not null) {
-			DetachFromNative(AddonNamePlate);
-		}
-	}
-	
-	public void Dispose()
-		=> Unload();
+        addonLifecycle.RegisterListener( AddonEvent.PostSetup, "NamePlate", OnNamePlateSetup );
+        addonLifecycle.RegisterListener( AddonEvent.PreFinalize, "NamePlate", OnNamePlateFinalize );
 
-	private void OnNamePlateSetup(AddonEvent type, AddonArgs args)
-		=> AttachToNative((AddonNamePlate*)args.Addon);
+        if( AddonNamePlate is not null ) {
+            AttachToNative( AddonNamePlate );
+        }
+    }
 
-	private void AttachToNative(AddonNamePlate* addonNamePlate)
-		=> framework.RunOnFrameworkThread(() => AttachNodes(addonNamePlate));
+    public void Unload() {
+        addonLifecycle.UnregisterListener( OnNamePlateSetup );
+        addonLifecycle.UnregisterListener( OnNamePlateFinalize );
 
-	private void OnNamePlateFinalize(AddonEvent type, AddonArgs args)
-		=> DetachFromNative((AddonNamePlate*)args.Addon);
+        if( AddonNamePlate is not null ) {
+            DetachFromNative( AddonNamePlate );
+        }
+    }
 
-	private void DetachFromNative(AddonNamePlate* addonNamePlate)
-		=> framework.RunOnFrameworkThread(() => DetachNodes(addonNamePlate));
+    public void Dispose()
+        => Unload();
 
-	protected abstract void AttachNodes(AddonNamePlate* addonNamePlate);
-	protected abstract void DetachNodes(AddonNamePlate* addonNamePlate);
-	protected abstract void LoadConfig();
+    private void OnNamePlateSetup( AddonEvent type, AddonArgs args )
+        => AttachToNative( ( AddonNamePlate* )args.Addon.Address );
 
-	protected void RefreshAddon() {
-		if (AddonNamePlate is not null) {
-			if (AddonNamePlate->UldManager.LoadedState is AtkLoadState.Loaded) {
-				AddonNamePlate->UldManager.UpdateDrawNodeList();
-			}
-			
-			AddonNamePlate->UpdateCollisionNodeList(false);
-		}
-	}
+    private void AttachToNative( AddonNamePlate* addonNamePlate )
+        => framework.RunOnFrameworkThread( () => AttachNodes( addonNamePlate ) );
+
+    private void OnNamePlateFinalize( AddonEvent type, AddonArgs args )
+        => DetachFromNative( ( AddonNamePlate* )args.Addon.Address );
+
+    private void DetachFromNative( AddonNamePlate* addonNamePlate )
+        => framework.RunOnFrameworkThread( () => DetachNodes( addonNamePlate ) );
+
+    protected abstract void AttachNodes( AddonNamePlate* addonNamePlate );
+    protected abstract void DetachNodes( AddonNamePlate* addonNamePlate );
+    protected abstract void LoadConfig();
+
+    protected void RefreshAddon() {
+        if( AddonNamePlate is not null ) {
+            if( AddonNamePlate->UldManager.LoadedState is AtkLoadState.Loaded ) {
+                AddonNamePlate->UldManager.UpdateDrawNodeList();
+            }
+
+            AddonNamePlate->UpdateCollisionNodeList( false );
+        }
+    }
 }

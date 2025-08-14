@@ -1,18 +1,18 @@
-﻿using FFXIVClientStructs.FFXIV.Common.Math;
+using FFXIVClientStructs.FFXIV.Common.Math;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace KamiToolKit.Nodes;
 
 // Untested, this node might not work at all.
-public unsafe class CollisionNode() : NodeBase<AtkCollisionNode>(NodeType.Collision) {
+public unsafe class CollisionNode() : NodeBase<AtkCollisionNode>( NodeType.Collision ) {
     public CollisionType CollisionType {
-        get => (CollisionType)InternalNode->CollisionType;
-        set => InternalNode->CollisionType = (ushort) value;
+        get => ( CollisionType )InternalNode->CollisionType;
+        set => InternalNode->CollisionType = ( CollisionType )value;
     }
 
     public uint Uses {
         get => InternalNode->Uses;
-        set => InternalNode->Uses = (ushort) value;
+        set => InternalNode->Uses = ( ushort )value;
     }
 
     public AtkComponentBase* LinkedComponent {
@@ -20,6 +20,6 @@ public unsafe class CollisionNode() : NodeBase<AtkCollisionNode>(NodeType.Collis
         set => InternalNode->LinkedComponent = value;
     }
 
-    public bool CheckCollision(Vector2 coordinate, bool inclusive = true)
-        => InternalNode->CheckCollisionAtCoords((short)coordinate.X, (short)coordinate.Y, inclusive);
+    public bool CheckCollision( Vector2 coordinate, bool inclusive = true )
+        => InternalNode->CheckCollisionAtCoords( ( short )coordinate.X, ( short )coordinate.Y, inclusive );
 }

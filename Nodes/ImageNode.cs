@@ -1,13 +1,13 @@
-﻿using System.Numerics;
 using Dalamud.Interface.Textures.TextureWraps;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using KamiToolKit.Classes;
+using System.Numerics;
 
 namespace KamiToolKit.Nodes;
 
 public unsafe class ImageNode : NodeBase<AtkImageNode> {
 
-    public ImageNode() : base(NodeType.Image) {
+    public ImageNode() : base( NodeType.Image ) {
         var asset = NativeMemoryHelper.UiAlloc<AtkUldAsset>();
         asset->Id = 1;
         asset->AtkTexture.Ctor();
@@ -15,7 +15,7 @@ public unsafe class ImageNode : NodeBase<AtkImageNode> {
         var part = NativeMemoryHelper.UiAlloc<AtkUldPart>();
         part->UldAsset = asset;
         part->U = 0;
-        part->V= 0;
+        part->V = 0;
         part->Height = 0;
         part->Width = 0;
 
@@ -30,31 +30,31 @@ public unsafe class ImageNode : NodeBase<AtkImageNode> {
         InternalNode->DrawFlags = 0x100;
         InternalNode->PartsList = partsList;
     }
-    
-    protected override void Dispose(bool disposing) {
-        if (disposing) {
+
+    protected override void Dispose( bool disposing ) {
+        if( disposing ) {
             InternalNode->UnloadTexture();
-            
-            NativeMemoryHelper.UiFree(InternalNode->PartsList->Parts->UldAsset);
-            NativeMemoryHelper.UiFree(InternalNode->PartsList->Parts);
-            NativeMemoryHelper.UiFree(InternalNode->PartsList);
-            
-            base.Dispose(disposing);
+
+            NativeMemoryHelper.UiFree( InternalNode->PartsList->Parts->UldAsset );
+            NativeMemoryHelper.UiFree( InternalNode->PartsList->Parts );
+            NativeMemoryHelper.UiFree( InternalNode->PartsList );
+
+            base.Dispose( disposing );
         }
     }
-    
+
     public float U {
         get => InternalNode->PartsList->Parts->U;
-        set => InternalNode->PartsList->Parts->U = (ushort) value;
+        set => InternalNode->PartsList->Parts->U = ( ushort )value;
     }
-    
+
     public float V {
         get => InternalNode->PartsList->Parts->V;
-        set => InternalNode->PartsList->Parts->V = (ushort) value;
+        set => InternalNode->PartsList->Parts->V = ( ushort )value;
     }
 
     public Vector2 TextureCoordinates {
-        get => new(U, V);
+        get => new( U, V );
         set {
             U = value.X;
             V = value.Y;
@@ -63,51 +63,51 @@ public unsafe class ImageNode : NodeBase<AtkImageNode> {
 
     public float TextureHeight {
         get => InternalNode->PartsList->Parts->Height;
-        set => InternalNode->PartsList->Parts->Height = (ushort) value;
+        set => InternalNode->PartsList->Parts->Height = ( ushort )value;
     }
-    
+
     public float TextureWidth {
         get => InternalNode->PartsList->Parts->Width;
-        set => InternalNode->PartsList->Parts->Width = (ushort) value;
+        set => InternalNode->PartsList->Parts->Width = ( ushort )value;
     }
 
     public Vector2 TextureSize {
-        get => new(TextureWidth, TextureHeight);
+        get => new( TextureWidth, TextureHeight );
         set {
             TextureWidth = value.X;
             TextureHeight = value.Y;
         }
     }
-    
+
     public uint PartId {
         get => InternalNode->PartId;
-        set => InternalNode->PartId = (ushort) value;
+        set => InternalNode->PartId = ( ushort )value;
     }
 
     public WrapMode WrapMode {
-        get => (WrapMode)InternalNode->WrapMode;
-        set => InternalNode->WrapMode = (byte) value;
-    } 
-
-    public ImageNodeFlags ImageNodeFlags {
-        get => (ImageNodeFlags) InternalNode->Flags;
-        set => InternalNode->Flags = (byte) value;
+        get => ( WrapMode )InternalNode->WrapMode;
+        set => InternalNode->WrapMode = ( byte )value;
     }
 
-    public void LoadTexture(string path, uint version=1)
-        => InternalNode->LoadTexture(path, version);
+    public ImageNodeFlags ImageNodeFlags {
+        get => ( ImageNodeFlags )InternalNode->Flags;
+        set => InternalNode->Flags = ( byte )value;
+    }
+
+    public void LoadTexture( string path, uint version = 1 )
+        => InternalNode->LoadTexture( path, ( int )version );
 
     public void UnloadTexture()
         => InternalNode->UnloadTexture();
 
-    public void LoadIcon(uint iconId)
-        => InternalNode->LoadIconTexture(iconId, 0);
+    public void LoadIcon( uint iconId )
+        => InternalNode->LoadIconTexture( iconId, 0 );
 
     /// <summary>
     /// Don't use, experimental. Will crash your game.
     /// </summary>
     /// <param name="texture"></param>
-    public void SetImGuiTexture(IDalamudTextureWrap texture) {
+    public void SetImGuiTexture( IDalamudTextureWrap texture ) {
         // public unsafe void DoTheThing(IDataManager dataManager) {
         //     var data = dataManager.GameData.GetFileFromDisk<TexFile>(@"D:\Downloads\huton1.tex");
         //
@@ -123,17 +123,17 @@ public unsafe class ImageNode : NodeBase<AtkImageNode> {
         //         background.AddColor = Vector3.Zero;
         //     }
         // }
-        
+
         // InternalNode->PartsList->Parts->UldAsset->AtkTexture.Resource->KernelTextureObject->D3D11ShaderResourceView = (void*)texture.ImGuiHandle;
     }
 
     public uint? LoadedIconId {
         get {
-            if (InternalNode->PartsList is null) return null;
-            if (InternalNode->PartsList->Parts is null) return null;
-            if (InternalNode->PartsList->Parts->UldAsset is null) return null;
-            if (!InternalNode->PartsList->Parts->UldAsset->AtkTexture.IsTextureReady()) return null;
-            if (InternalNode->PartsList->Parts->UldAsset->AtkTexture.Resource is null) return null;
+            if( InternalNode->PartsList is null ) return null;
+            if( InternalNode->PartsList->Parts is null ) return null;
+            if( InternalNode->PartsList->Parts->UldAsset is null ) return null;
+            if( !InternalNode->PartsList->Parts->UldAsset->AtkTexture.IsTextureReady() ) return null;
+            if( InternalNode->PartsList->Parts->UldAsset->AtkTexture.Resource is null ) return null;
 
             return InternalNode->PartsList->Parts->UldAsset->AtkTexture.Resource->IconId;
         }

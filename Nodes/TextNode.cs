@@ -50,12 +50,7 @@ public unsafe class TextNode() : NodeBase<AtkTextNode>( NodeType.Text ) {
 
     public TextFlags TextFlags {
         get => ( TextFlags )InternalNode->TextFlags;
-        set => InternalNode->TextFlags = ( byte )value;
-    }
-
-    public TextFlags2 TextFlags2 {
-        get => ( TextFlags2 )InternalNode->TextFlags2;
-        set => InternalNode->TextFlags2 = ( byte )value;
+        set => InternalNode->TextFlags = ( TextFlags )value;
     }
 
     public uint FontSize {
